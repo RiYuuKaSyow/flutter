@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'dart:io';
 
-void main() => runApp(MyApp());
-
+void main(){
+    runApp(
+        MaterialApp(
+            home: HomePage(),
+        )
+    );
+} 
+/*
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -62,11 +70,105 @@ Widget build(BuildContext context) {
   // ...
 }
 }
+*//*
+class HomePage extends StatefulWidget{
+    State<HomePage> createState(){
+        return _HomePage() ;
+    }
+}*/
 
+class GamePage extends StatelessWidget{
+    Widget build(BuildContext context){
+        return WillPopScope(
+            onWillPop: () async => false,
+            child: Container(
+                color:Colors.purple,
+                child: RaisedButton(
+                        child: Text('離開'),
+                        onPressed:(){
+                            Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder:(context)=> HomePage() ),
+                            ModalRoute.withName('/'),
+                        );
+                    }
+                ),
+            ),
+        );
+    }
+}
 
+class HomePage extends StatelessWidget{
+    
+    @override
+    Widget build(BuildContext context){
+        return WillPopScope(
+            onWillPop: () async => false,
+            child: Container(
+                color: Colors.white,
+                child: Center(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                            RaisedButton(
+                                child: Text(
+                                    '開始' ,
+                                    style: TextStyle(
+                                        fontSize:55.0 ,
+                                    ) 
+                                ),
+                                onPressed: (){
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(builder:(context)=> GamePage() ),
+                                        ModalRoute.withName('/'),
+                                    );
+                                },
+                                padding: EdgeInsets.fromLTRB(40,20,40,20),
+                                color: Color.fromRGBO(175,0,200,1.0),
+                                textColor: Colors.white ,
+                                splashColor: Color.fromRGBO(150,0,175,1.0),
+                                shape: StadiumBorder(),
+                            ),
+                            RaisedButton(
+                                child: Text(
+                                    '紀錄' ,
+                                    style: TextStyle(
+                                        fontSize:55.0 ,
+                                    ) 
+                                ),
+                                onPressed: (){},
+                                padding: EdgeInsets.fromLTRB(40,20,40,20),
+                                color: Color.fromRGBO(0,175,200,1.0),
+                                textColor: Colors.white ,
+                                splashColor: Color.fromRGBO(150,0,175,1.0),
+                                shape: StadiumBorder(),
+                            ),
+                            RaisedButton(
+                                child: Text(
+                                    '離開' ,
+                                    style: TextStyle(
+                                        fontSize:55.0 ,
+                                    ) 
+                                ),
+                                onPressed: () => exit(0),
+                                padding: EdgeInsets.fromLTRB(40,20,40,20),
+                                color: Color.fromRGBO(200,0,0,1.0),
+                                textColor: Colors.white ,
+                                splashColor: Color.fromRGBO(150,0,0,1.0),
+                                shape: StadiumBorder(),
+                            ),
+                        ]
+                    ),
+                ),
+            ),
+        );
+    }
+}
+/*
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 100;
-
+  
   void _addCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -80,6 +182,9 @@ class _MyHomePageState extends State<MyHomePage> {
           _counter++;
       }
     });
+  }
+  int rand_res(int win_counts){
+      
   }
 
   @override
@@ -147,3 +252,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+*/
