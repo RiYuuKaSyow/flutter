@@ -52,46 +52,173 @@ class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
+*/
 
-class ImageDemo extends StatelessWidget {
-  @override
-  
-Widget build(BuildContext context) {
-  // ...
-  return DecoratedBox(
-    decoration: BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('images/Syow.jpg'),
-        // ...
-      ),
-      // ...
-    ),
-  );
-  // ...
-}
-}
-*//*
-class HomePage extends StatefulWidget{
-    State<HomePage> createState(){
-        return _HomePage() ;
+class GamePage extends StatefulWidget{
+    State<GamePage> createState(){
+        return _GamePage() ;
     }
-}*/
+}
 
-class GamePage extends StatelessWidget{
+class _GamePage extends State<GamePage>{
+    var _probability = [0.95 , 0.925 , 1.0] ;
+    int _win_counts = 0 , _res = 0 ;
+    bool _lose = false ;
+    String pic = 'images/Syow.jpg' ;
+    
+    void game_function(int input){
+        setState((){
+            var randob = new Random() ;
+            var rand_val = randob.nextDouble() ;
+            if( rand_val <= _probability[0] ){
+                //win
+                _win_counts++ ;
+                _probability[0] *= 0.87 ;
+                _probability[1] *= 0.95 ;
+                _res = ( (input+2)%3 ) ;
+            }else if( rand_val <= _probability[1] ){
+                //flat
+                _res = input ;
+            }else{
+                //lost
+                _probability[0]= 0.95 ;
+                _probability[1]= 0.975 ; 
+                _res = ( (input+1)%3 );
+                _lose = true ;
+            }
+            switch(_res){
+                case 0:pic="images/paper.png";break;
+                case 1:pic="images/scissors.png";break;
+                case 2:pic="images/rock.png";break;
+            }
+        });
+    }
+    
+    void exit_game(){
+        Navigator.pop(context);
+    }
+    
     Widget build(BuildContext context){
         return WillPopScope(
             onWillPop: () async => false,
             child: Container(
-                color:Colors.purple,
-                child: RaisedButton(
-                        child: Text('離開'),
-                        onPressed:(){
-                            Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder:(context)=> HomePage() ),
-                            ModalRoute.withName('/'),
-                        );
-                    }
+                color:Colors.black,
+                child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: _lose?
+                    <Widget>[
+                        Expanded(
+                            child:Container(
+                                width:10000,
+                                color: Colors.white,
+                                margin: EdgeInsets.fromLTRB(0,20,0,0),
+                                child:Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:MainAxisAlignment.center,
+                                    children: <Widget>[
+                                        Expanded(
+                                            flex:0,
+                                            child: Text("可惜猜輸了 \n此次連贏$_win_counts次"),
+                                        ),
+                                        RaisedButton(
+                                                child: Text("離開"),
+                                                onPressed:()=>exit_game(),
+                                                padding: EdgeInsets.fromLTRB(40,20,40,20),
+                                                color: Color.fromRGBO(200,0,0,1.0),
+                                                textColor: Colors.white ,
+                                                splashColor: Color.fromRGBO(150,0,0,1.0),
+                                                shape: StadiumBorder(),
+                                        ),                                                    
+                                    ],
+                                ),
+                            ),    
+                        ),
+                    ] 
+                    :<Widget>[
+                        Expanded(
+                            flex:7,
+                            child: Container(
+                                margin: EdgeInsets.fromLTRB(0,20,0,0),
+                                height:30,
+                                width:10000,
+                                color: Colors.white,
+                                child: Column(
+                                    children: <Widget>[
+                                        Expanded(
+                                            child:Text(
+                                                    '目前贏了$_win_counts次',
+                                                ),                                    
+                                        ),
+                                        Expanded(
+                                            child: Image(
+                                                image:AssetImage(pic),
+                                            ),
+                                        ),
+                                    ],
+                                ),
+                            ),
+                        ),
+                        Expanded(
+                            flex:5,
+                            child: Container(
+                                child: Column(
+                                    children: <Widget>[
+                                        Expanded(
+                                            child: GestureDetector(
+                                                onTap:(){
+                                                    game_function(0);
+                                                },
+                                                child: Container(
+                                                    width:10000,
+                                                    child:Image(
+                                                       image: AssetImage('images/paper.png'),
+                                                   ),
+                                                   decoration: BoxDecoration(
+                                                       border: Border.all(color: Colors.black),
+                                                       color: Colors.green,
+                                                   ),
+                                               ),
+                                            ),
+                                        ),
+                                        Expanded(
+                                            child: GestureDetector(
+                                                onTap:(){
+                                                    game_function(1);
+                                                },
+                                                child: Container(
+                                                    width:10000,
+                                                    child:Image(
+                                                       image: AssetImage('images/scissors.png'),
+                                                   ),
+                                                   decoration: BoxDecoration(
+                                                       border: Border.all(color: Colors.black),
+                                                       color: Colors.blue,
+                                                   ),
+                                               ),
+                                            ),
+                                        ),
+                                        Expanded(
+                                            child: GestureDetector(
+                                                onTap:(){
+                                                    game_function(2);
+                                                },
+                                                child: Container(
+                                                    width:10000,
+                                                    child:Image(
+                                                       image: AssetImage('images/rock.png'),
+                                                   ),
+                                                   decoration: BoxDecoration(
+                                                       border: Border.all(color: Colors.black),
+                                                       color: Colors.red,
+                                                   ),
+                                               ),
+                                            ),
+                                        ),                                                                                                            
+                                    ],
+                                ),
+                            ),
+                        ),
+                    ],
                 ),
             ),
         );
